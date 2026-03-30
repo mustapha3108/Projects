@@ -1,0 +1,27 @@
+interface
+ipv6 enable
+ipv6 address @ipv6/mask (link-local)
+no shutdown
+exit
+ipv6 unicast-routing
+
+
+ipv6 route @ipv6/mask @ipv6_voisin
+
+show ipv6 route
+show ipv6 neighbors
+
+
+networks:
+lan-R1-R2: 2001:DB8:ACAD:1:: /64
+lan-R3-R4: 2001:DB8:ACAD:2:: /64
+lan-R5-R6: 2001:DB8:ACAD:3:: /64
+R0-R1: 2001:DB8:ACAD:4:: /64
+R0-R2: 2001:DB8:ACAD:5:: /64
+R0-R3: 2001:DB8:ACAD:6:: /64
+R0-R4: 2001:DB8:ACAD:7:: /64
+R0-R5: 2001:DB8:ACAD:8:: /64
+R0-R6: 2001:DB8:ACAD:9:: /64
+R1-R6: 2001:DB8:ACAD:A:: /64
+R2-R3: 2001:DB8:ACAD:B:: /64
+R4-R5: 2001:DB8:ACAD:C:: /64

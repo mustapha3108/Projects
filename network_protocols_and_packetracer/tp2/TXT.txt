@@ -1,0 +1,71 @@
+ospf:
+	mise a jour declenché par evenement
+	taille de mise a jour petite
+	hello messages to see if neighbors are on every 10 secs
+	.5 and .6 for broadcast
+	champ protocol: 89
+	convergence rapide
+	nb de saux can be unlimited
+	chaque routeur possede une vue global
+	heavy calcs, so wastes toomuch cpu and ram, pretty bandwidth efficient though
+	algorithm djikstra
+	deviding the networl on zones
+	zone federatrice = zone 0 = backbone, doit etre physiquement collé a tout les autres zone
+	
+	routeur interne ir intra zones, in other zones rather than 0, links to zone 0
+	backbone route br belongs to zone 0
+	area border router abr inter zone
+	asbr as boundary router connexion avec d'autres as, like router that links to internet
+	
+	
+	config# router ospf nb_process
+	network @connected @mask_generic area nb_zone
+	
+	
+	passive-interface interface_name nb_interface
+	passive interface default
+	
+	router-id id_router
+	
+	default information originate
+	redisyribute<static | connec
+	
+	
+	if ip ospf #nb_process area nb_zone
+	
+	
+	show ip route 
+	show ip route @network
+	show ip route ospf
+	show ip route nb_process
+	
+	
+	
+	--------------------------
+	config if# ip ospf hello-interval *NB
+	dead-interval
+	x*(x-1)/2 +1
+	2*(x-1=
+	dr bdr dro
+	
+	IP OSPF priority X
+	
+	router-id *id(ip format)
+	
+	interface loopback x
+	IP ADDRESS @IP_MASK
+	exit
+	
+	router osp
+	
+	
+	in router(id(manual) > logique > physyque) then in election it doesn't matter, bigger wins
+	
+	clear id ospf process
+	
+	show ip ospf neighbor
+	
+	
+	
+	
+	

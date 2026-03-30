@@ -1,0 +1,19 @@
+package comp
+
+
+templ Login(){
+    <div class="flex flex-col justify-center items-center">
+        <form hx-post="/login" hx-target="#loginerr" class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+          <legend class="fieldset-legend">login</legend>
+
+          <label class="label">name</label>
+          <input type="text" class="input" placeholder="name" name="UserName"/>
+
+          <label class="label">Password</label>
+          <input type="text" class="input" placeholder="password" name="Password"/>
+
+          <button type="submit" class="btn btn-neutral mt-4">login</button>
+        </form>
+        <h1 id="loginerr" class="text-error"></h1>
+    </div>
+}

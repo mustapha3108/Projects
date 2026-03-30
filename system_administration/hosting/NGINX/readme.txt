@@ -1,0 +1,1 @@
+this is a project i did to host on a virtual machine using nginx

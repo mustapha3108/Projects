@@ -1,0 +1,65 @@
+aight so for meilisearch
+
+-instal scout: composer require laravel/scout
+-publish vendor for scout: php artisan vendor:publish --provider="Laravel\Scout\ScoutServiceProvider"
+-install meilisearch-php : composer require meilisearch/meilisearch-php http-interop/http-factory-guzzle
+-install meilisearch binary: curl -L https://install.meilisearch.com | sh 
+-execute the binary like this: ./meilisearch --master-key="aSampleMasterKey"
+-add these to .env file:
+    SCOUT_DRIVER=meilisearch
+    MEILISEARCH_HOST=http://127.0.0.1:7700
+    MEILISEARCH_KEY=masterKey
+
+-add use Laravel\Scout\Searchable; and use Searchable; to the desired model 
+-add toSearchable method to the model:
+    public function toSearchableArray(): array
+        {
+            $array = $this->toArray();
+            return $array;
+        } 
+-import the desired model into scout: php artisan scout:import "App\Models\photo"
+
+-start using photo::search();
+-can be chained with photo::search()->where
+
+
+
+--aight so downloading files:
+api frontend:
+    window.downloadFile = async function (path, title) {
+        try {
+            const response = await fetch(`/download/${title}/${path}`, {
+                method: 'GET',
+            });
+
+            if (!response.ok) throw new Error('Failed to download');
+
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = title;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (e) {
+            console.error(e);
+            alert('Download failed: ' + e.message);
+        }
+    }
+
+api backend:
+    Route::get('/download/{title}/{path}', function ($title, $path) {
+        $relativePath =  $path;
+    
+        if (!$path || !Storage::disk('public')->exists($relativePath)) {
+            return response()->json([
+                'error' => 'File not found',
+                'path' => $relativePath
+            ], 404);
+        }
+    
+        return Storage::disk('public')->download($relativePath, $title);
+    })->where('path', '.*');
+

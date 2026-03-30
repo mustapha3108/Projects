@@ -1,0 +1,20 @@
+router rigrp $nas
+network $iproute $mask
+
+
+
+distance $DA
+eigrp router is $id
+metric weight $tos $k1 $k2 $k3 $k4 $k5
+
+
+show ip route
+
+
+key chain $clef
+key $nkey
+key_string 
+
+
+interface ...
+ip authentiatio mode 

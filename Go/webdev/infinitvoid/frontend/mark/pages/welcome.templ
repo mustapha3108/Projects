@@ -1,0 +1,57 @@
+package pages
+
+
+templ Welcome(loggedin bool){
+    //nav
+    <div class="flex flex-col justify-center items-center min-h-screen gap-8">
+        <h1 class="text-2xl text-blue-600 mt-3">DOMAIN EXPANSION</h1>
+        <h2 class="text-3xl text-blue-800 mt-3">INFINIT VOID</h2>
+        <div class="mt-12 flex justify-center gap-8">
+            <a href="/posts" class="btn btn-lg btn-link btn-primary">view posts</a>
+            if loggedin {
+                <a href="/account" class="btn btn-lg btn-link btn-accent">account</a>
+            } else {
+                <a href="/sign" class="btn btn-lg btn-link btn-secondary">login / sign up</a>
+            }
+        </div>
+        <button class="btn btn-outline btn-primary" hx-post="alpinetest" hx-target="#res">test alpine</button>
+        <div id="res"></div>
+
+
+        <div class="flex justify-center gap-16">
+            <div x-data="{colab1:0}" class="flex flex-col justify-center items-center gap-3">
+                <button hx-post="/colab1" hx-swap="none" :hx-vals="() => ({message:colab1})"
+                x-on:htmx:after-request="colab1 = $event.detail.xhr.responseText"
+                class="btn btn-primary">test colab 1</button>
+                <p x-text="colab1"></p>
+            </div>
+
+            <div x-data="{colab1:0}" class="flex flex-col justify-center items-center gap-3">
+                <button hx-post="/colab1" hx-swap="none" :hx-vals="JSON.stringify({message:colab1})"
+                x-on:htmx:after-request="colab1 = $event.detail.xhr.responseText"
+                class="btn btn-secondary">test colab 2</button>
+                <p x-text="colab1"></p>
+            </div>
+
+            <div x-data="{colab2:0, crow:true}" class="flex flex-col justify-center items-center gap-3">
+                <button
+                @click="crow = false; 
+                fetch('/apitest', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json', 'X-Csrf-Token': document.cookie.split('; ').find(r => r.startsWith('csrf_='))?.split('=')[1]},
+                body: JSON.stringify({message:colab2})
+                }).then(r=>r.json()).then(v => {colab2 = v; crow = true})"
+                class="btn btn-accent">test api fetch</button>
+                <p x-text="colab2" :class="crow? 'text-green-600' : 'text-red-700'"></p>
+            </div>
+
+            <div x-data="{colab2:0, crow:true}" class="flex flex-col justify-center items-center gap-3">
+                <button hx-post="/apitest" hx-swap="none" hx-ext="json-enc" :hx-vals="JSON.stringify({message:colab2})"
+                        x-on:htmx:after-request="colab2 = JSON.parse($event.detail.xhr.responseText).message; crow= !crow"
+                class="btn btn-accent">this shit does not work</button>
+                <p x-text="colab2" :class="crow? 'text-green-600' : 'text-red-700'"></p>
+            </div>
+        </div>
+
+    </div>
+}

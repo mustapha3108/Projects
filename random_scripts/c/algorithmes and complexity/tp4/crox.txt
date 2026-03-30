@@ -1,0 +1,26 @@
+10³
+5*10⁴
+10⁵
+2*10⁵
+4*10⁴
+8*10⁵
+16*10⁶
+32*10⁶
+64*10⁴
+128*10⁶
+256*10⁶
+512*10⁶
+1024*10⁶
+2048*10⁶
+
+
+
+donné aleatoir/ trié / trié sense inverse
+
+tban2
+
+decription de method, complexité theorique, complexité spacial
+
+
+rapport, decription de method, complexité theorique, complexité spacial, programme en c, temps executions, les graphs, compatibilité entre theorique et experimentale, remarques
+

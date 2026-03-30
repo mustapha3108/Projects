@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<!-- saved from url=(0024)https://192.168.200.216/ -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crowsite</title>
+    <style>
+        /* Global styling */
+        body {
+            background-color: #121826; /* dark bluish-gray */
+            color: #cfd8ef; /* soft light blue text */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        /* Header container */
+        .header-container {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        /* H1 styling */
+        .header-container h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #88aaff; /* subtle bluish */
+            margin: 0.5rem 0;
+        }
+
+        /* Features container */
+        .features-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* UL styling */
+        .features-container ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .features-container li {
+            background: #1a2035; /* soft dark blue card */
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0, 0, 50, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .features-container li:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 12px rgba(0, 0, 80, 0.5);
+        }
+
+        /* CLI code style */
+        span {
+            background: #1c2330;
+            color: #77bfff;
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            font-family: 'Courier New', Courier, monospace;
+            display: inline-block;
+            margin: 0.3rem 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-container">
+        <h1>DOMAIN EXPANSION</h1>
+        <h1>INFINITE VOID</h1>
+        <p>aka blue nginx server on a vm</p>
+    </div>
+
+    <div>
+        <h2>steps on how to make this project (skipping the vm instalation)</h2>
+
+        <h3>install openssh because the ubuntu server terminal sucks the life out of me </h3>
+            <span>sudo apt install openssh-server</span> <br>
+            <span>sudo systemctl start ssh</span> <br>
+            <span>sudo systemctl enable ssh</span> <br>
+            <span>sudo systemctl status ssh</span> <br>
+            <span>sudo ufw status</span> <br>
+            <span>sudo ufw allow ssh</span> <br>
+            <span>sudo ufw reload</span> <br>
+
+            <p>then you can ssh from your host terminal</p>
+            <span>ssh vm-username@vm-ip</span> <br>
+            <p>you can also share files, which is useful</p>
+            <span>scp ~/Downloads/myfile.txt raven@192.168.1.100:/home/raven/</span> <br>
+            <p>you can also reverse the arguments to coy from vm or add <span>-r</span> for folders</p>
+
+        <h3>install Nginx</h3>
+            <span>sudo apt install nginx -y </span> <br>
+            <span>sudo ufw allow 'Nginx Full'</span> <br>
+            <span>sudo ufw reload</span> <br>
+            
+
+        <p>after that you can http into your server ip from browser, real cool</p>
+        
+        <h3>configuring nginx</h3>
+        <p>first you gotta create a folder in <span>/var/www/</span> to serve as your site folder</p>
+        <p>then you gotta configure ninx to serve it, so first make it available through the sites avialable directory in nginx</p>
+        <span>sudo nano sites-available/crowsite</span> <br>
+        <p>write someting ike this :</p>
+        <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">            <code style="color:#d4d4d4;">
+            server {
+                listen 80;
+                server_name crowsite;
+            
+                root /var/www/crowsite;
+                index index.html;
+            
+                location / {
+                    try_files $uri $uri/ =404;
+                }
+            }
+            </code>
+        </pre>
+        <p>then link the available to the enabled and reload nginx</p>
+        <span>sudo ln -s /etc/nginx/sites-available/crowsite /etc/nginx/sites-enabled/crowsite</span> <br>
+        <span>sudo nginx -t</span> <br>
+        <span>sudo systemctl reload nginx</span> <br>
+        <p>nginx ships with a default page, don't forget to make it unavailabel</p>
+        <span>sudo unlink /etc/nginx/sites-enabled/default</span> <br>
+        <p>!! AND BOOM YOU SERVED A WEBSITE, LINUS WOULD BE PROUD !!</p>
+
+        <h3>creating a reverse proxy</h3>
+        <p>now from what i understand, a proxy is basically just a routing layer in front of the server, to direct to different ports and other servers</p>
+        <p>Nginx supports this and then some so here is what to do</p>
+        <ol>
+            <li>have your server bloc be in a random port rather than 80</li>
+            <li>create another folder for proxy and put stuff like this in it
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                    #reverse proxy
+                    server {
+                        listen 80;
+                        server_name _;
+                    
+                        location / {
+                            proxy_pass http://127.0.0.1:8000;
+                        
+                            proxy_set_header Host $host;
+                            proxy_set_header X-Real-IP $remote_addr;
+                            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                        }
+                    }
+                    </code>
+                </pre>
+            </li>
+            <li>enable it and that's pretty much it</li>
+        </ol>
+        <p>as you can guess, the additional lines are just ip packet type data</p>
+
+        <h3>load balancing</h3>
+        <p>so load balancing is basically a form of reverse proxy that sends traffic to one of many servers / processes</p>
+        <p>so for educational purposes i did create the load balancer as a second reverse proxy</p>
+        <ol>
+            <li>as always gotta write the server block, and link and stuff</li>
+            <li>for this i needed to change the ports so it would make sense and create a second site,
+                so i can observe the magic happening.
+            </li>
+            <li>the server bloc here 
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                    #note: this in itself is an actual reverse proxy, so this is just for tetsing
+                    upstream birdsites {
+                       #can also do stuff like ip_hash and least_con
+                        server 127.0.0.1:8080 weight=5;  # 30% approx
+                        server 127.0.0.1:8081 weight=5;  # 70% approx
+                    }
+
+                    server {
+                        listen 8000;
+                        server_name _;
+                    
+                        location / {
+                            proxy_pass http://birdsites;
+                            proxy_set_header Host $host;
+                            proxy_set_header X-Real-IP $remote_addr;
+                            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                        }
+                    }
+                    </code>
+                </pre>
+            </li>
+            <li>i don't like bird btw, it was either racist nazzi stuff or this</li>
+        </ol>
+        <p>!! AND NOW I HAVE A LOAD BALANCER WOHOOOO.....kill me please !!</p>
+
+        <h3>forward proxy</h3>
+        <p>also known as just proxy, it is basically a layer in front of teh client to make it secure and stuff</p>
+        <p>i had to  craete yet anotehr vm for this, thank god for puppy linux, 1gb of ram man that's elite</p>
+        <p>also i had to do this twice, once with nginx and once with squid because nginx does not support https proxy</p>
+        <p>also i had to allow the ports in teh firewall, <span>3128 for squid</span> and whatever i chose for Nginx</p>
+        <ol>
+            <li>the steps for server blocs apply like normal</li>
+            <li>wrtite this 
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                    server {
+                        listen 8888;
+
+                        resolver 8.8.8.8 ipv6=off;
+
+                        allow 192.168.200.0/24;
+                        deny all;
+
+                        access_log /home/raven/forward-proxy.log;
+
+                        location / {
+                            proxy_pass $scheme://$http_host$request_uri;
+                        
+                            proxy_set_header Host $http_host;
+                            proxy_set_header X-Real-IP $remote_addr;
+                            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                        }
+                    }
+                    </code>
+                </pre>  
+            </li>
+            <li>i also added a logging thing to confirm it's working</li>
+            <li>gotta update the firewall: <span>sudo ufw allow 8888/tcp</span> then <span>sudo ufw reload</span></li>
+            <li>on the client just do this: <span>curl -x http://192.168.200.216:8888 http://google.com</span> if it returns html then we're in baby</li>
+        </ol>
+
+        <p>now that was nginx, not really built for proxy, so i decided to try squid, which is way easier</p>
+        <ol>
+            <li><span>sudo apt install squid</span></li>
+            <li>go to <span>sudo nano /etc/squid/squid.conf</span> and allow this traffic <span>acl localnet src 192.168.200.0/24</span>
+                and <span>http_access allow localnet</span></li>
+            <li><span>sudo ufw allow 3128/tcp</span></li>
+            <li><span>sudo ufw reload</span></li>
+            <li><span>sudo systemctl restart squid</span></li>
+            <li>finally just test from client with https <span>curl -x http://192.168.200.216:3128 https://google.com</span></li>
+            <li>logs are here: <span>sudo tail -f /var/log/squid/access.log</span></li>
+        </ol>
+
+        <h3>Prometheus and Grafana</h3>
+        <p>alright so from what i unserstand prometheus is a monitoring system and grafana acts liek its advanced gui dashboard</p>
+        <p>from what i understand prometheus is more pecifically a metric collection thing, like resource usage, errors and request....that kind of stuff</p>
+        <p>the instalation is pretty forward just follow teh steps</p>
+        <ol>
+            <li><span>sudo apt install prometheus -y</span></li>
+            <li><span>sudo systemctl start prometheus</span>, also ya knowm enable and status</li>
+            <li>find it at <span>http://your-server-ip:9090</span></li>
+            <li>a lot of gobbly guk here 
+                <span>sudo apt install -y software-properties-common <br>
+                      sudo add-apt-repository "deb https://packages.grafana.com/oss/deb stable main"<br>
+                      wget -q -O - https://packages.grafana.com/gpg.key | sudo apt-key add - <br>
+                      sudo apt update <br>
+                      sudo apt install grafana -y <br>
+                </span>
+            </li>
+            <li><span>sudo ststemctl enable grafana-server</span> also start and status</li>
+            <li>access it at <span>http://localhost:3000</span></li>
+            <li>search data source in the interface and add prometheus and <span>http://localhost:9090</span> in the configuration</li>
+        </ol>
+        <p>now we gotta link prometheus with the mighty nginx, luckily there is already a tool for that so just</p>
+        <ol>
+            <li>on the nginx machine<span>sudo apt install prometheus-node-exporter -y</span></li>
+            <li><span>sudo systemctl enable prometheus-node-exporter</span> also start and status</li>
+            <li>test with <span>curl http://localhost:9100/metrics</span></li>
+            <li><span>ufw allow 9100</span></li>
+            <li>now in prometheus machine <span>sudo nano /etc/prometheus/prometheus.yml</span></li>
+            <li>add this to the yaml file <br>
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                   - job_name: 'ubuntu-server'
+                      static_configs:
+                        - targets: ['SERVER_IP:9100']
+                    </code>
+                </pre>
+            </li>
+            <li>restart prometheus</li>
+            <li>you should now see it in prometehus dashboard under targets</li>
+            <li>finally in grafana import a dashboard with id <span>1860</span> or any other one</li>
+        </ol>
+        <p>okay so that was teh metrics of the phisical server, we can also get the metrics of the Nginx process</p>
+        <ol>
+            <li>first add this to your proxy under location, not inside, under
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                   location /nginx_status {
+                        stub_status;
+                        allow 127.0.0.1;
+                        deny all;
+                   }
+
+                    </code>
+                </pre>
+            </li>
+            <li>reload and restart like ususal</li>
+            <li>download this thing called nginx-prometheus-exporter
+                <span>wget https://github.com/nginx/nginx-prometheus-exporter/releases/download/v1.5.1/nginx-prometheus-exporter_1.5.1_linux_amd64.tar.gz <br>
+                      tar -xzf nginx-prometheus-exporter_1.5.1_linux_amd64.tar.gz <br>
+                      sudo mv nginx-prometheus-exporter /usr/local/bin/</span>
+            </li>
+            <li>make this program a long runnung systemd programe 
+                <span>sudo nano /etc/systemd/system/nginx-prometheus-exporter.service</span>
+                then paste 
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                    [Unit]
+                    Description=NGINX Prometheus Exporter
+                    After=network.target
+
+                    [Service]
+                    ExecStart=/usr/local/bin/nginx-prometheus-exporter --nginx.scrape-uri=http://127.0.0.1/nginx_status
+                    Restart=always
+                    User=www-data
+
+                    [Install]
+                    WantedBy=multi-user.target
+                    </code>
+                </pre>
+            </li>
+            <li>then <span>sudo systemctl daemon-reload</span> ans start and stuff like normal with systemctl</li>
+            <li><span>/etc/prometheus/prometheus.yml</span>then add 
+                <pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">                    <code style="color:#d4d4d4;">
+                    - job_name: 'my Nginx Process'
+                        static_configs:
+                          - targets: ['127.0.0.1:9113'] 
+                    </code>
+                </pre>
+            </li>
+            <li>then just import in frafana 1860 and 17452</li>
+        </ol>
+        <h3>!! project is finished congrats !!</h3>
+        
+        <h1>Note: the project did not infact end, i wanna cry</h1>
+        <p>okay so i'm gonna ignore the cloud document thing because it has way too many parameters and it is 45 pages long, and i can't read</p>
+        <p>so lucky me time to learn all this myself, kill me</p>
+        <p>basically i need a second server with a reverse proxy</p>
+        <p>i need to put python scripts in that server + index page and route to them</p>
+        <p>while at it maybe figure out how rate limitting and ssl works, they are genuinly important</p>
+        
+        <h3>installing the second server</h3>
+        <p>nothing much to see here spart from <span>sudp apt install python3</span> and <span>python3 --version</span></p>
+        <p>next is making a static address so you gotta 
+        <span>sudo nano /etc/netplan/50-cloud-init.yaml</span> then put <span>dhcp: no</span>
+        under it do <br> <span>addresses: <br>
+               - 192.168.200.245/24</span> 
+        </p>
+        <p>then <span>sudo netplan apply</span></p>
+        <p>after wiring up a loadbalancer on nest to the proxies of the respective servers, now we have basic cluster, yay</p>
+        <p>i used ports 80 on loadbalancer and 2nd proxy, and 8000 on first proxy</p>
+        
+        <h3>Adding an api gateway</h3>
+        <p>from what i understand, Nginx can behave like a router you find in a framework, i guess it helps on infrastructure
+        when you have multiple services in different technologies</p>
+        <p>i'm gonna try to make it accessible through both server, but apps live on the second one (owl)</p>
+        <p>okay so here are the steps</p>
+        <ul>
+        	<li>first make some apps, i used python cuz even though python yucky python easy, make sure they listen on empty ports</li>
+        	<li>launch them with <span>python3 app.py</span> </li>
+        	<li>to kill them you only need <span>sudo fuser -k port-number/tcp</span></li>
+        	<li>then add this in your proxy and load-balancer
+       		<pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">             <code style="color:#d4d4d4;">
+             location /users {
+                proxy_pass http://127.0.0.1:3000/;
+                proxy_set_header Host $host;
+            }
+             
+                 # Route 2: Anything starting with /products goes to Port 3001
+            location /products {
+                proxy_pass http://127.0.0.1:3001/;
+                proxy_set_header Host $host;
+            }
+             </code>
+         	</pre>
+         	</li>
+          <li>note that in teh loadbalancer you put <span>http://192.168.200.245:80/users</span>, technically you can just route to the api directly but come on man reverse proxies exist for a reason</li>
+          <li>and yeah that is basically it, easy peasy</li>
+        </ul>
+        
+        <h3>caching and rate limmiting</h3>
+        <p>surprisingly very easy just add these to the top of proxy or load balancer</p>
+        <ul>
+       		<li>rate limitter: <span>limit_req_zone $binary_remote_addr zone=mylimit:10m rate=5r/s;</span></li>
+        	<li>caching: <span>proxy_cache_path /var/cache/nginx levels=1:2 keys_zone=my_cache:10m max_size=1g inactive=60m; </span></li>
+        </ul>
+        <p>then put these lines in whatever route you wanna apply this to</p>
+        <ul>
+       		<li>rate limitting: <span>limit_req  zone=mylimit burst=3 nodelay;</span></li>
+        	<li>caching:<span>proxy_cache my_cache; proxy_cache_valid 200 2s;</span> </li>
+        </ul>
+        <p>they are both referenced by the zone name and have parameters for where they are stored and requests per second/max size and inacetivity and bursts, which is a buffer btw</p>
+        
+        <h3>last but certainly not least, trying to do ssl/tls, well, kinda, gonna be local, in real life gotta hit the all cert</h3>
+        <ul>
+        	<li>first gotta generate a signed certificat: 
+        		<span>sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout /etc/ssl/private/nginx-selfsigned.key -out /etc/ssl/certs/nginx-selfsigned.crt</span>
+        	</li>
+        	<li>add this overcomplicated script that basically has everything in it 
+       		<pre style="background-color:#2d2d2d; padding:5px; border-radius:8px; overflow-x:auto;">             <code style="color:#d4d4d4;">
+             limit_req_zone $binary_remote_addr zone=gatewayssl_limit:10m rate=5r/s;
+             
+             # This is the line Nginx is complaining about missing:
+             proxy_cache_path /var/cache/nginxssl levels=1:2 keys_zone=gatewayssl_cache:10m max_size=1g inactive=60m use_temp_path=off;
+             
+             
+             server {
+                 listen 443 ssl;
+                 server_name _;
+             
+                 # SSL Files
+                 ssl_certificate /etc/ssl/certs/nginx-selfsigned.crt;
+                 ssl_certificate_key /etc/ssl/private/nginx-selfsigned.key;
+             
+                 # Helpful Header to see if Cache is working
+                 add_header X-Cache-Status $upstream_cache_status;
+             
+                 location / {
+                     # Assuming your site is in /var/www/crowsite
+                     root /var/www/crowsite;
+                     index index.html;
+                     try_files $uri $uri/ =404;
+                 }
+             
+                 # GATEWAY ROUTE: Users
+                 location /users {
+             
+                     limit_req zone=gatewayssl_limit burst=10 nodelay; # Rate Limit
+             
+                     proxy_pass http://192.168.200.245:3000/;
+                     proxy_set_header Host $host;
+                     proxy_set_header X-Real-IP $remote_addr;
+                 }
+             
+                 # GATEWAY ROUTE: Products (With Caching)
+                 location /products {
+             
+             
+                     proxy_cache gatewayssl_cache;                     # Enable Caching
+                     proxy_cache_valid 200 1m;                      # Cache success for 1 min
+             
+                     proxy_pass http://192.168.200.245:3001/;
+                     proxy_set_header Host $host;
+                 }
+            }     
+             </code>
+         	</pre>
+         	</li>
+          <li>and you're done, obviously i struffled here, you cannot have two files who use teh same zone name or same zone stoarge, so keep that in mind</li>
+        </ul>
+        
+        <h3>PROJECT FINISHED, hopefully</h3>
+    </div>
+
+</body></html>

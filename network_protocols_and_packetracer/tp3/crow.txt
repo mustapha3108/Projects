@@ -1,0 +1,32 @@
+----------FHRP----------
+firt hop redunduncy protocol: allows changing default gateway automatically
+it's actually a type of protocols: HSRP/VRRP/GLBP
+working with HSRP cuz cisco
+if the priority router is not manually set, we get the one with the bigger ip address
+and the rest of the priorities are set the same way
+(arp request, seraching for mac address)
+interval of update messages is 3 seconds
+some preemption thing exists, like if the priority router comes back online
+we create an identifier and a virtuall address for the group, and we give it to the pc
+
+interface name address @
+ip addreess ip mask
+no shutdown
+
+standby version {1,2}
+standby id @vertuelle
+standby id priority ID_P
+standby id preempt
+standby id track interface_name interface_number
+standby timers time_for_hello time_for_dead
+
+
+show standby
+show standby brief
+
+
+192.168.1.254/24	|	.253
+192.168.1.10
+
+
+

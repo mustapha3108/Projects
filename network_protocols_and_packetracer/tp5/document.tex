@@ -1,0 +1,151 @@
+\documentclass[12pt,a4paper]{report}
+
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{geometry}
+\geometry{
+	left=2.5cm,
+	right=2.5cm,
+	top=2.5cm,
+	bottom=2.5cm,
+}
+
+\begin{document}
+	
+	% ------------------------------------------------------
+	%                  COVER PAGE
+	% ------------------------------------------------------
+	\begin{titlepage}
+		\begin{center}
+			
+			\vspace*{2cm}
+			
+			{\Huge \textbf{Université de Sciences et Téchnologies Houari Boumedien}}\\[1.0cm]
+			
+			{\Large Faculty d'Informatique}\\[0.2cm]
+			{\Large Master 1 RSD}\\[2.0cm]
+			
+			{\huge \textbf{TP Reseaux BGP}}\\[0.5cm]
+			{\Large TP Reseaux et Protocols}\\[2.5cm]
+			
+			\textbf{Prof:} Mme Bouachi Farida  \\[0.5cm]
+			\textbf{Etudiant:} Belmouloud Mustapha Abdellah \\[0.2cm]
+			\textbf{Matricule:} 212131092524 \\[0.2cm]
+			\textbf{Groupe:} 1 \\[2.5cm]
+			\vfill
+			
+			{\large \today}
+			
+		\end{center}
+	\end{titlepage}
+	
+	% ------------------------------------------------------
+	%                  TABLE OF CONTENTS
+	% ------------------------------------------------------
+	\tableofcontents
+	\newpage
+	
+	% ------------------------------------------------------
+	%                  SECTION 1
+	% ------------------------------------------------------
+	\section{Réseaux EIGRP}
+	
+	Le Reseaux EIGRP a été créé en utilisant les commandes suivants: \\
+	router eigrp 1600 \\
+	network @ips\_direct @mask\_generic
+	C'était la partie déja disponible a cause des tps perecedents, il ya 10 sous réseaux eigrp en total. EIGRP est un protocol de routage dynamic qui permit a les routeurs de partager les sous réseaux entre eux
+	
+	\section{Réseaux OSPF}
+	
+	\subsection{Découpage VLSM}
+	avant d'appliquer le protocol ospf il faut d'abord assigner des address ip et definir nos sous réseaux, ce dernier depend largement sur la taille de chaque sous reseaux.\\
+	\\
+	\textbf{Zone 2 et 3: pas de decoupage nécéssaire} \\
+	 \textbf{Zone 0:}\\
+	 \begin{table}[H]
+	 	\centering
+	 	\begin{tabular}{l c c c}
+	 		\toprule
+	 		\textbf{nombre d'address} & \textbf{taille partie machine} & \textbf{@sous\_réseaux } & \textbf{@deffusion} \\
+	 		\midrule
+	 		8 & 3 & 122.12.194.128/29 & 122.12.194.135/29 \\
+	 		4 & 2 & 122.12.194.136/30 & 122.12.194.139/30\\
+	 		4 & 2 & 122.12.194.140/30 & 122.12.194.143/30 \\
+	 		\bottomrule
+	 	\end{tabular}
+	 	\caption{VLSM zone 0}
+	 	\label{Vlsm zone 0}
+	 \end{table}
+ 
+ 	\textbf{Zone 1:}\\
+ 	\begin{table}[H]
+ 		\centering
+ 		\begin{tabular}{l c c c}
+ 			\toprule
+ 			\textbf{nombre d'address} & \textbf{taille partie machine} & \textbf{@sous\_réseaux } & \textbf{@deffusion} \\
+ 			\midrule
+ 			1027 & 11 & 122.12.160.0/21 & 122.12.167.255/21 \\
+ 			256 & 8 & 122.12.168.0/24 & 122.12.168.255/24\\
+ 			9 & 4 & 122.12.169.0/28 & 122.12.169.15/28 \\
+ 			4 & 2 & 122.12.169.16/30 & 122.12.169.19/30\\
+ 			4 & 2 & 122.12.169.20/30 & 122.12.169.23/30\\
+ 			\bottomrule
+ 		\end{tabular}
+ 		\caption{VLSM zone 1}
+ 		\label{Vlsm zone 1}
+ 	\end{table}
+ 
+ 	\subsection{Configuration OSPF}
+	OSPF est un protocol de routage dynamic qui introduit le principe des zones, où zone 0 doit être directement connecté a tous autres zones, l'activation d'OSPF est trés simple, il faut just executer les commandes suivantes: \\
+	router ospf 1 \\
+	network @direct @mask\_generic area id\_zone
+	
+	\section{Réseaux BGP}
+	Packet tracer ne supporte pas iBGP (BGP inetrne) donc on vas dependre sur la destribution OSPF-BGP et EIGRP-BGP. \\
+	Dabord on vat activer BGP entre les deux routeur specifié \\
+	
+	router bgp 6506 //ou 6519 \\ 
+	network 180.180.180.180 mask 255.255.255.252 \\
+	neighbor @ip\_voisin remote-as 6519 //ou 6506 \\
+	
+	Ensuite il faut partager les sous reseaux OSPF et EIGRP avec BGP \\
+	redistribute ospf 1 \\
+	ou \\
+	redistribute eigrp 1600 \\
+	
+	Ensuite il faut partager les sous réseaux reçue de BGP avec les réseaux OSPF et EIGRP \\
+	
+	OSPF: \\
+	router ospf 1 \\
+	redistribute bgp 6506 subnets \\
+	
+	EIGRP: \\
+	router eigrp 1600 \\
+	redistribute bgp 6519 metric 15050 20 255 1 1500 \\
+	
+	les metric sont des metric de lien comme la bande passante, il faut les inclure sinon EIGRP vas les ignorer
+
+
+	\newpage
+
+	\section{Resultas}
+	
+	Example avec shiw ip route
+	
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{1.png} % replace with your file
+		\caption{Example Routeur OSPF}
+		\label{fig:Router ospf}
+	\end{figure}
+
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.9\textwidth]{2.png} % replace with your file
+		\caption{Example Routeur EIGRP}
+		\label{fig:Router EIGRP}
+	\end{figure}
+	
+	on remarque EX pour EIGRP et E2 pour OSPF qui indique que les reseaux sont externes
+\end{document}

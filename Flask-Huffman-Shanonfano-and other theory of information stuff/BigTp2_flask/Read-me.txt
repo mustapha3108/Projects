@@ -1,0 +1,1 @@
+not to brag but those are my own ways to implement huffman and shannon-fano without classes or tree hierarchy, i am profoundly proud of that.

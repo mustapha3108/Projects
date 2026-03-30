@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='robot.png') }}" type="image/x-icon">
+    <title>Big TP 2</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <h1 class="til">Algorithm ShanonFano</h1>
+        <form method="post">
+            <textarea name="sym" id="sym" placeholder="donnez les symboles comme suite: A, B, C"></textarea>
+            <textarea name="prob" id="prob" placeholder="donnez les probabilitiées comme suite: 0.2, 0.3 , 0.5"></textarea>
+            <input type="submit" name="fanosub" id="fanosub" class="btn">
+        </form>
+    </div>
+    <div class="pres">
+        <div class="res">
+            {% if err %}
+                <p class="err">{{err}}</p>
+            {% endif %}
+
+            {% if n %}
+                {% for x in putput %}
+                    <p>{{ x }}</p>
+                {% endfor %}
+                <p>l'efficacité est: {{ n }}</p>
+            {% endif %}
+        </div>
+    </div>
+    <a href="{{url_for('index')}}" class="lim">returner vers la page principale</a>
+</body>
+</html>

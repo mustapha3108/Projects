@@ -1,0 +1,14 @@
+ipv6 router rip $name
+redistribute {connected|eigrp|ospf|statci}
+ipv6 rio $name enable
+
+-----ospf
+ipv6 router ospf $id
+router $id_router 1.1.1.1
+ipv6 ospf $id_router area $n_area
+
+-----
+ipv6 router eigrp $n
+no shutdown
+rigrp router-id $id
+ipv6 eigrp $n

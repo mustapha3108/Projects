@@ -1,0 +1,1 @@
+i can't upload entire virtual machines, so this is my attempt to convey what i learned during my years in university

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='robot.png') }}" type="image/x-icon">
+    <title>Big TP 1</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <div id="hello">
+            <h1>Bienvenu a BIG TP1: operations fondamentales du module</h1>
+        </div>
+        <div id="info">
+            <h3>Belmouloud Mustapha</h3>
+            <h3>212131092524</h3>
+        </div>
+            <h5>calculer l'entropie d'une source</h5>
+            <form method="post">
+                <textarea name="prob" placeholder="donnez les probabilitiées comme suite: 0.2, 0.3 , 0.5"></textarea>
+                <input type="submit" name="sub" id="sub" class="btn">
+            </form>
+        <div class="main">
+            <div class="res">
+                {% if err %}
+                <p class="err">{{err}}</p>
+                {% endif %}
+                {% if h %}
+                    <p>l'entropie est: {{ h }} bits/symbole</p>
+                {% endif %}
+            </div>
+        </div>
+        <div id="buttons">
+            <h4>choisissez une operation</h4>
+            <div>
+                <a href="{{ url_for('joint')}}" class="btn">Entropie de deux source avec p(x,y)</a>
+                <a href="{{ url_for('conj')}}" class="btn">Entropie de deux source avec p(x|y)</a>
+                <a href="{{ url_for('prefixx')}}" class="btn">code prefix</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,4 @@
+source -m venv venv
+don't forget you did this:
+    export QT_QPA_PLATFORM=xcb
+    export QT_LOGGING_RULES="*.debug=false;qt.qpa.*=false"

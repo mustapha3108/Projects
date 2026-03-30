@@ -1,0 +1,7 @@
+to start: project go mod init projectname
+file structure: 
+    parent(go.mod and main.go) + subfolders
+    main.go has package name and subfolders have package names
+    file names in subfolders are not important, make sure you give them folder/package name
+    import like this: import mainfoldername(aka project name)/packagename
+    use like this: packagename.funcname

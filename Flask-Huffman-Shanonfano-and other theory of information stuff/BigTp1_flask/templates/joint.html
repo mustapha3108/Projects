@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='robot.png') }}" type="image/x-icon">
+    <title>Big TP 1</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <h1 class="til">Algorithm calculer l'entropie conjointe, conditionelle et la quantité d'information avec les probabilitées conjointes</h1>
+        <form method="post">
+            <textarea name="prob1" placeholder="donnez les probabilitiées de la source 1 comme suite: 0.2, 0.3 , 0.5"></textarea>
+            <textarea name="prob2" placeholder="donnez les probabilitiées de la source 2 comme suite: 0.2, 0.3 , 0.5"></textarea>
+            <textarea name="prob3" placeholder="donnez les probabilitiées jointes comme suite: p(x1,y1), p(x1,y2), p(x1,y3) & p(x2,y1),p(x2,y2),p(x2,y3)"></textarea>
+            <input type="submit" name="hsub" id="hsub" class="btn">
+        </form>
+    </div>
+    <div class="main">
+        <div class="res">
+            {% if err %}
+                <p class="err">{{err}}</p>
+                {% endif %}
+                {% if Hxsy %}
+                    <p>l'entropie conditionelle est: {{ Hxsy }} bits/symbole</p>
+                    <p>l'entropie conjointe est: {{ Hxy }} bits/symbole</p>
+                    <p>la quantité d'information est: {{ I }} bits</p>
+                {% endif %}
+        </div>
+    </div>
+    <a href="{{url_for('index')}}" class="lim">returner vers la page principale</a>
+</body>
+</html>

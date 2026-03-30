@@ -1,0 +1,34 @@
+SWITCH:
+
+vlan is_vlan
+name nom_vlan
+exit
+
+no vlan id_vlan
+
+
+interface fastethernet0/0_
+switchport mode access 
+switch port access vlan id_vlan
+
+--between switches and switch-router
+interface ..
+switchport mode trunk
+
+
+
+interface range fas......0/x-y
+
+
+
+show vlan
+
+show vlan brief
+show vlan id/ name / interface vlan / interface trunk / show mac-address-table
+
+ROUTER:
+interface...no shutdow
+
+interface $name $number.x
+encapsulation dot1q id_vlan
+ip address @ip_vlan

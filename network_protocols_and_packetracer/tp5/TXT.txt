@@ -1,0 +1,45 @@
+egp protocols =>bgp
+vecteur de chemain
+evaluate total path unlike rip
+bgp has global view
+extern = 20 | intern = 200
+mise a jour chaque 30 seconds works with tcp
+EGP CONNECTS DYNAMIC NETWORKS LIKE RIP OR OSPF OE EIGRP
+only works on border routers
+hello = 1min
+
+
+show ip bgp
+#ebgp:
+ttl=1
+router bfp $idthing
+neighbor $ip_voisin remote-as $neighbor-idthing
+
+#ibgp: not supported by cisco packet tracer
+ttl=max = 255
+router bfp $idthing
+neighbor $ip_voisin remote-as $idthing
+
+igp vs ibgp = protocol inter vs just exchanging extern routes
+
+we gonna work with igp instead of ibgp cuz ibgp not supported by packet tracer, although it causes problems in real life
+
+da:
+ripv2 = 120 | eigrp = i:90 E:170 | ospf = 110 | ibgp : 200 | ebgp : 20
+
+15 225 na na
+udp ip ip tcp
+
+
+router bgp $sysid
+neighbor @ip-voisin remote as $sysid
+network @ip as @mask
+
+resdistribute {conected|ospf|eigrp|static}
+bgp redistribute-internal
+
+inside ospf
+redisbute bgp $sysid
+
+router bgp $sysid
+redisbute ospf 1

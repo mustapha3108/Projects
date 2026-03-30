@@ -1,0 +1,6 @@
+igp interrieur / egp exterior
+igp interierur has: vecteur de distance(rip and igrp/eigrp) / etat de lien(depends on the link type, ospf and isis)
+those are types of dynamic routing protocoles
+ripng and eigrpv6 some evolutions
+
+egp has vecteur de chemain(egp and bgp-4, and mp-bgp ipv4 and ipv6 support)

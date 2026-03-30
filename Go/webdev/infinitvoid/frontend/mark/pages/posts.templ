@@ -1,0 +1,25 @@
+package pages
+
+import(
+    "infinitvoid/help"
+)
+
+templ Posts(posts []help.Post) {
+    <div class="flex flex-col justify-center items-center"> 
+        <h1 class="text-center text-green-600 text-5xl">posts i guess</h1>
+        <a href="/" class="link link-info text-center text-orange-500">go to main</a>
+        <div class="flex flex-wrap justify-between">
+        for _, item := range posts {
+            <div class="flex flex-col justify-center items-center gap-4 m-12">
+                <p class="m-6 p-2 outline-1 outline-yellow-300 underline">{ item.PostName } with a id of {item.UserID}</p>
+                <p class="underline text-3xl text-blue-600 ">{ item.Description }</p>
+                <img src={item.ImagePath} alt="image path i guess" class="rounded-sm p-8 outline-2 outline-emerald-600  w-2xl">
+
+                <p class="text-secondary text-3xl text-center line-through">kill mr kill mr kill mr</p>
+                <div class="text-2xl underline text-primary">i hope this wrks </div>
+                <p class="text-xl text-purple-600 text-center capitalize underline">i hate vite and shit and stuff kill me</p>
+            </div>
+        }
+        </div>
+    </div>
+}

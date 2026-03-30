@@ -1,0 +1,32 @@
+package pages
+
+import(
+    "infinitvoid/help"
+)
+
+templ Account(user *help.User){
+    <div class="flex flex-col justify-center items-center min-h-screen">
+        <h1 class="text-2xl text-shadow-blue-700">hello {user.UserName} </h1>
+        <a href="/" class="link link-accent">go to hello</a>
+
+        <div>
+            <form hx-post="/uploadPoste" hx-target="#posterr" hx-encoding="multipart/form-data" class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+              <legend class="fieldset-legend">Login</legend>
+
+              <label class="label">postename</label>
+              <input type="text" class="input" placeholder="name" name="PostName"/>
+
+              <label class="label">description</label>
+              <input type="text" class="input" placeholder="Password" name="Description"/>
+
+              <label class="label">image</label>
+              <input type="file" class="file-input file-input-ghost" placeholder="crow.png" name="Image"/>
+
+              <button type="submit" class="btn btn-neutral mt-4">Login</button>
+            </form>
+            <h1 id="posterr"></h1>
+        </div>
+
+        <button hx-post="/logout" class="btn btn-error btn-lg m-16 btn-dash">logout</button>
+    </div>
+}

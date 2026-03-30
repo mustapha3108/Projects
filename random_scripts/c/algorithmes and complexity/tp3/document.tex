@@ -1,0 +1,497 @@
+\documentclass[12pt,a4paper]{article}
+
+% Packages
+\usepackage{graphicx} % For images
+\usepackage{setspace} % For spacing
+\usepackage{geometry} % Page margins
+\usepackage{fancyvrb}
+\DefineVerbatimEnvironment{MyCode}{Verbatim}{
+	tabsize=4,         % one tab = 4 spaces
+%	frame=single,      % optional frame
+	fontsize=\small,   % optional font size
+	xleftmargin=0pt    % remove left margin
+}
+
+\geometry{margin=1in}
+
+
+\begin{document}
+	
+	% ----------- TITLE PAGE -----------
+	\begin{titlepage}
+		\centering
+		
+		% University Logo
+		\includegraphics[width=4cm]{images.png}\par
+		\vspace{1cm}
+		
+		% University name
+		{\bfseries\LARGE Université de sciences et technologies Houari Boumedian \par}
+		\vspace{0.5cm}
+		{\Large Faculté d'Informatique \par}
+		\vspace{1.5cm}
+		
+		% Subject / Module
+		{\Huge \textbf{TP N°3 : Complexité polynomiale} \par}
+		\vspace{1.5cm}
+		
+		% Course info
+		{\Large  \textbf{Algorithmique avancé et complexité} \par}
+		{\Large  \textbf{Prof: dr.Moussaoui} \par}
+		\vspace{2cm}
+		
+		% Student info
+		\begin{flushleft}
+			{\Large \textbf{Etudiants:}} \\
+			\vspace{0.5cm}
+			{\large - \textbf{Belmouloud Mustapha Abdellah }: partie test} \\
+			\vspace{0.25cm}
+			{\large - \textbf{Merazi Wail :} partie Redaction} \\
+			\vspace{0.25cm}
+			{\large - \textbf{Ben chaban Razika :} partie generation des données } \\
+			\vspace{0.25cm}
+			{\large - \textbf{Tabti Ikram :} partie code} \\
+		\end{flushleft}
+		
+		\vspace{2.5cm}
+		
+		% Footer
+		%{\large \today \par}
+		
+	\end{titlepage}
+	
+	% ----------- BEGIN DOCUMENT -----------
+	\section{Execrice 1}
+	\subsection{Generation des données}
+	la generation des données a été faite en utilisant Malloc et la fonction rand(), il faut creer 3 matrice de taiile n donné par l'utilisateur:
+	\begin{MyCode}
+		printf("donnez la taille de la matrice: ");
+		scanf("%d", &n);
+		
+		int **m1 = malloc(n * sizeof(int*));
+		for (int i = 0; i < n; i++) {
+			m1[i] = malloc(n * sizeof(int));
+			for (int j = 0; j< n; j++){
+				m1[i][j] = rand() % (n*10 +1);
+			}
+			
+		}
+		
+		int **m2 = malloc(n * sizeof(int*));
+		for (int i = 0; i < n; i++) {
+			m2[i] = malloc(n * sizeof(int));
+			for (int j = 0; j< n; j++){
+				m2[i][j] = rand() % (n*10 +1);
+			}
+		}
+		
+		int **res = malloc(n * sizeof(int*));
+		for (int i = 0; i < n; i++) {
+			res[i] = malloc(n * sizeof(int));
+		}
+	\end{MyCode}
+
+	\subsection{creation de la function de produit de deux matrice taille n}
+	
+	\begin{MyCode}
+		void matrixmulti(int n, int **m1, int **m2, int **res){
+			
+			for (int i = 0; i < n; i++){
+				for (int j = 0; j < n; j++){
+					res[i][j] = 0;
+					for (int k = 0; k < n; k++){
+						res[i][j] = res[i][j] + m1[i][k] * m2[k][j];
+					}
+				}
+			}
+			
+		}
+	\end{MyCode}
+
+	\subsection{La Partie Tests}
+
+	les tests ont été faits sure un laptop i3 11eme generation, 2 cores @3Ghz et 8GB de ram avec un system d'operation linux Zorinos (base ubuntu)
+	
+	\subsubsection{la fonction utilisée pour mesurer le temps d'execution}
+	la fonction utilisé pour mesurer le temps:
+	\begin{MyCode}
+		double now() {
+			struct timespec ts;
+			clock_gettime(CLOCK_MONOTONIC, &ts);
+			return ts.tv_sec + ts.tv_nsec * 1e-9;
+		}
+		
+		double t0 = now();
+		matrixmulti(n, m1, m2, res);
+		double t1 = now();
+		
+		printf("Execution time: %.6f seconds\n", t1 - t0);
+		fprintf(ftime, "%d -> %.6f \n", n, t1-t0);
+		
+	\end{MyCode}
+	
+	\subsubsection{les tableaux resultants}
+	
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|*{6}{c|}}
+			\hline
+			n & 100 & 200 & 300 & 400 & 500 \\ \hline
+			temps en seconds & 0.008934 & 0.062806 & 0.191228 & 0.432845 & 0.823493 \\ \hline
+		\end{tabular}
+		\caption{Execution times for n = 100 to 500}
+	\end{table}
+	
+	%\vspace{-3cm}  % reduce vertical space between tables
+	
+	% -------- TABLE 2 --------
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|*{6}{c|}}
+			\hline
+			n & 600 & 700 & 800 & 900 & 1000 \\ \hline
+			temps en seconds & 1.531348 & 2.504993 & 3.869664 & 5.350861 & 8.966937 \\ \hline
+		\end{tabular}
+		\caption{Execution times for n = 600 to 1000}
+	\end{table}
+	
+	%\vspace{-3cm}
+	
+	% -------- TABLE 3 --------
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|*{6}{c|}}
+			\hline
+			n & 2000 & 3000 & 4000 & 5000 & 6000 \\ \hline
+			temps en seconds & 97.818775 & 334.602784 & 818.551430 & 1516.392213 & 2640.094264 \\ \hline
+		\end{tabular}
+		\caption{Execution times for n = 2000 to 6000}
+	\end{table}
+	
+	%\vspace{-3cm}
+	
+	% -------- TABLE 4 --------
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|*{6}{c|}}
+			\hline
+			n & 7000 & 8000 & 9000 & 10000 \\ \hline
+			temps en seconds & 4707.665077 & 7652.726984 & 12274.188779 & 15930.494307 \\ \hline
+		\end{tabular}
+		\caption{Execution times for n = 7000 to 10000}
+	\end{table}
+
+	\newpage
+	
+
+
+	\subsubsection{le graph resultants}
+	generé par python et matplotlib
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=1 \textwidth]{matrix_multiplication.png}  % path to your file
+		\caption{temps d'execution pour des differentes tailles}
+		\label{fig:temps d'execution en fonction de n}
+	\end{figure}
+	
+	\subsubsection{Remarques sur les Resultats}
+	On remarque que les temps d'exécution se développent de manière exponentielle avec la taille de la matrice.
+	
+	\subsection{Repondre sur les questions theorique}
+	\subsubsection{Complexité theorique}
+	on a trois bouble imbriqué et n=m=p donc c'est o(n³)
+	
+	\subsubsection{memoire necessaire}
+	taille d'une seul matrice  = n², on a 3 matrice de meme taille don 3*n², la taille d'une seul  case et de 4 octets (sur les system 64 bits) donc la taille finale est de \textbf{12n²}
+	
+	\subsubsection{les resultats theorque sont ils en concordance avec les resultats pratiques?}
+	oui les resultats theoriques et pratique sont en concordance l'evolution est clairement exponontielle ce qui est exprimé par es resultats theoriques
+	
+	\newpage
+	
+	
+	
+	
+	
+	
+	
+	\section{Exercise 2}
+	\subsection{Generation des données}
+	l'idée principale est de creer une matrice grande la remplir soit avec des elements triés ou aleatoires, puis remplir la petite matrice avec des elements deja existant dans la grande matrice, pour avoir des resultats coherents, la petite matrice a étée placé dans une place pré-connue.
+	
+	\begin{MyCode}
+		
+		int n1, n2, tr;
+		printf("donnez la taille de grande matrice: ");
+		scanf("%d", &n1);
+		printf("donnez la taille de la petitle matrice: ");
+		scanf("%d", &n2);
+		if (n2>n1/2){
+			printf("n2 dit etre inferieur que n1/2");
+			exit(1);
+		}
+		
+		printf("appuiyer 1 pour trié et 2 pour non trié: ");
+		scanf("%d", &tr);
+		if (tr != 1 && tr != 2){
+			printf("vous devez apuyer 1 ou 2");
+			exit(1);
+		}
+		
+		//creating the data
+		int **mb = malloc(n1 * sizeof(int*));
+		for (int i = 0; i < n1; i++) {
+			mb[i] = malloc(n1 * sizeof(int));
+			for (int j = 0; j< n1; j++){
+				if(tr==2) mb[i][j] = rand() % (100);
+				else {
+					if(j==0) mb[i][j] = rand() % 10;
+					else mb[i][j] =  mb[i][j-1] + rand() % 10;
+				}
+			}
+		}
+		
+		int **ms = malloc(n2 * sizeof(int*));
+		for (int i = 0; i < n2; i++) {
+			ms[i] = malloc(n2 * sizeof(int));
+			for (int j = 0; j< n2; j++){
+				ms[i][j] = mb[n1/2 + i][n1/2 + j];
+			}
+		}
+		
+	\end{MyCode}
+
+	\subsection{creations des functions sousMat1 et sousMat2}
+	
+	il s'agit de definir la condition d'arret a n1-n2 (taille de grande matrice - taille de petite matrice) et utiliser le premier element de la petite matrice comme un indice de recherche, pour sousMat2, on a utilisé la recherche Dichotomique sur les lignes de la matrice
+	
+	\begin{MyCode}
+		void sousMat1(int **mb, int **ms, int n1, int n2){
+			
+			int found = 0; int skip = 0;
+			for (int i = 0; i < n1-n2; i++){
+				for (int j = 0; j < n1-n2; j++){
+					if (mb[i][j] == ms[0][0]){
+						found = 1;
+						skip = 0;
+						for (int k = 0; k < n2; k++){
+							for (int kk = 0; kk < n2; kk++){
+								if (mb[i+k][j+kk] != ms[k][kk]){
+									skip = 1;
+									found = 0;
+									break;
+								}   
+							} 
+							if (skip == 1) break;
+						}               
+					}  
+					if(found == 1 ){
+						printf("MATRIX FOUND\n");
+						return;
+					}         
+				}       
+			}  
+			if (found == 0) printf("matrix NOT found\n");
+		}
+		
+		void sousMat2(int **mb, int **ms, int n1, int n2){
+			
+			int found = 0; int skip = 0; int start; int finish;
+			for (int i = 0; i < n1-n2; i++){
+				if(mb[i][n1/2] > ms[0][0]){
+					start = 0; finish = n1/2 - 1;
+				}else if (mb[i][n1/2] < ms[0][0]){
+					start = n1/2 + 1;
+					finish = n1-n2;
+				}else if(mb[i][n1/2] == ms[0][0]){
+					found = 1;
+					skip = 0;
+					for (int k = 0; k < n2; k++){
+						for (int kk = 0; kk < n2; kk++){
+							if (mb[i+k][n1/2 + kk] != ms[k][kk]){
+								skip = 1;
+								found = 0;
+								break;
+							}   
+						} 
+						if (skip == 1) break;
+					}                
+				}
+				if(found == 1 ){
+					printf("MATRIX FOUND\n");
+					return;
+				}
+				else{     
+					for (int j = start; j < finish; j++){
+						if (mb[i][j] == ms[0][0]){
+							found = 1;
+							skip = 0;
+							for (int k = 0; k < n2; k++){
+								for (int kk = 0; kk < n2; kk++){
+									if (mb[i+k][j+kk] != ms[k][kk]){
+										skip = 1;
+										found = 0;
+										break;
+									}   
+								} 
+								if (skip == 1) break;
+							}               
+						}  
+					}
+				}
+				if(found == 1 ){
+					printf("MATRIX FOUND\n");
+					return;
+				}
+			}
+			if (found == 0) printf("matrix NOT found\n");
+		}
+	\end{MyCode}
+
+
+	\newpage
+	
+	\subsection{les Tests}
+	%\section*{Ordered Search (1)}
+	\subsubsection{les temps d'executions}
+	\textbf{elements triés: }
+	% Table 1
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			100 & 10 & 0.000033 \\ 
+			200 & 20 & 0.000074 \\ 
+			300 & 30 & 0.000159 \\ 
+			400 & 40 & 0.000244 \\ 
+			500 & 50 & 0.000365 \\ 
+			600 & 60 & 0.000539 \\ \hline
+		\end{tabular}
+		\caption{Ordered search: Matrix size 100–600}
+	\end{table}
+	
+	% Table 2
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			700 & 70 & 0.000670 \\ 
+			800 & 80 & 0.000933 \\ 
+			900 & 90 & 0.001072 \\ 
+			1000 & 100 & 0.001137 \\ 
+			2000 & 200 & 0.003670 \\ 
+			3000 & 300 & 0.008517 \\ \hline
+		\end{tabular}
+		\caption{Ordered search: Matrix size 700–3000}
+	\end{table}
+	
+	% Table 3
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			4000 & 400 & 0.014253 \\ 
+			5000 & 500 & 0.025372 \\ 
+			6000 & 600 & 0.039839 \\ 
+			7000 & 700 & 0.049066 \\ 
+			8000 & 800 & 0.067164 \\ 
+			9000 & 900 & 0.080761 \\ \hline
+		\end{tabular}
+		\caption{Ordered search: Matrix size 4000–9000}
+	\end{table}
+	
+	% Table 4
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			10000 & 1000 & 0.099204 \\ \hline
+		\end{tabular}
+		\caption{Ordered search: Matrix size 10000}
+	\end{table}
+	\newpage
+	% =================== UNORDERED SEARCH TABLES ===================
+	%\section*{Unordered Search (2)}
+	\textbf{elements non triés: }
+	% Table 1
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			100 & 10 & 0.000060 \\ 
+			200 & 20 & 0.000138 \\ 
+			300 & 30 & 0.000300 \\ 
+			400 & 40 & 0.000681 \\ 
+			500 & 50 & 0.000771 \\ 
+			600 & 60 & 0.001065 \\ \hline
+		\end{tabular}
+		\caption{Unordered search: Matrix size 100–600}
+	\end{table}
+	
+	% Table 2
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			700 & 70 & 0.001399 \\ 
+			800 & 80 & 0.001705 \\ 
+			900 & 90 & 0.002236 \\ 
+			1000 & 100 & 0.002565 \\ 
+			2000 & 200 & 0.008599 \\ 
+			3000 & 300 & 0.019162 \\ \hline
+		\end{tabular}
+		\caption{Unordered search: Matrix size 700–3000}
+	\end{table}
+	
+	% Table 3
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			4000 & 400 & 0.033946 \\ 
+			5000 & 500 & 0.053714 \\ 
+			6000 & 600 & 0.082268 \\ 
+			7000 & 700 & 0.108207 \\ 
+			8000 & 800 & 0.135675 \\ 
+			9000 & 900 & 0.172304 \\ \hline
+		\end{tabular}
+		\caption{Unordered search: Matrix size 4000–9000}
+	\end{table}
+	
+	% Table 4
+	\begin{table}[h!]
+		\centering
+		\begin{tabular}{|c|c|c|}
+			\hline
+			Matrix size & Small matrix size & Execution time (s) \\ \hline
+			10000 & 1000 & 0.213147 \\ \hline
+		\end{tabular}
+		\caption{Unordered search: Matrix size 10000}
+	\end{table}
+
+	\newpage
+	
+	\subsubsection{le graph resultant}
+	generé par python et mathplotlib
+	\begin{figure}[h!]
+		\centering
+		\includegraphics[width=1 \textwidth]{matrix_search.png}  % path to your file
+		\caption{temps d'execution pour des differentes tailles}
+		\label{fig:temps d'execution en fonction de n1 et n2}
+	\end{figure}
+
+	\subsubsection{remarques sur les resultats}
+	on remarque que les temps se devolopent d'une façon exponontielle, mais avec une courbe plus douce que celle de le produit matricielle, on remarque aussi que les temps sont trops petits, car les operations de comparaisons en c sur les processeurs moderne sont trés rapids, mais la courbe affirme que la complixité se devolope d'une manniere logique
+	
+	
+	\subsection{Repondre sur les questions theoriques}
+	aux pire cas, la complexité de sousMat1 et sousMat2 est toujour o(n²) car on a (n1-n2)² iterations pour sousMat1 et (n1/2-n2)² iterations pour sousMat2, ce qui est coherents avec les resultats pratiques.
+	
+\end{document}

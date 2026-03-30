@@ -1,0 +1,12 @@
+welcome:
+        login/sign up model
+        hero
+        some pictures
+dashboard:
+        settings
+        upload
+        delete
+        modify
+        sidebar
+searches
+about and shit like that

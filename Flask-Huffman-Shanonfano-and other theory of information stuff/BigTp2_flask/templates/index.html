@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="{{ url_for('static', filename='robot.png') }}" type="image/x-icon">
+    <title>Big TP 2</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div>
+        <div id="hello">
+            <h1>Bienvenu a BIG TP2: Huffman et ShanonFano</h1>
+        </div>
+        <div id="info">
+            <h3>Belmouloud Mustapha</h3>
+            <h3>212131092524</h3>
+        </div>
+        <div id="buttons">
+            <h4>choisissez un algorithm</h4>
+            <div>
+                <a href="{{ url_for('huff')}}" class="btn">Huffman</a>
+                <a href="{{ url_for('fano')}}" class="btn">Shannon-Fano</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
