@@ -1,61 +1,36 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 📸 Pixabay Clone
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A high-performance, full-stack image-sharing platform inspired by Pixabay. I built this project to push my web development skills beyond basic CRUD operations, focusing specifically on application speed, advanced search capabilities, and seamless client-server state management.
 
-## About Laravel
+## 🚀 Overview
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+This platform allows users to discover, upload, and engage with high-quality imagery. By leveraging Laravel Octane, the application stays resident in memory, drastically reducing response times and handling concurrent requests efficiently. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## ✨ Key Features
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+*   **Real-Time Search:** Integrated with **Meilisearch** to provide instant, highly relevant, and typo-tolerant image discovery as the user types.
+*   **High-Speed Delivery:** Hosted and served via **Laravel Octane**, boosting overall application speed and backend performance.
+*   **Interactive Social Engagement:** Users can seamlessly upload their own pictures, delete them, and leave comments or likes on others' work.
+*   **UX-Aware Interactivity:** Designed with a focus on fluid state management between the server and client. Actions like liking or commenting update instantly on the UI without sacrificing backend synchronization or relying on heavy, bloated client-side logic.
 
-## Learning Laravel
+## 🛠️ Tech Stack
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+*   **Backend:** Laravel + Laravel Octane
+*   **Search Engine:** Meilisearch
+*   **Frontend / State Management:** Alpine, Tailwind, Livewire
+*   **Database:** SQlite
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 🧠 Architectural Highlights & Learning Outcomes
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+The primary goal of this project was mastering advanced web development concepts:
+1.  **Memory Management:** Moving from a traditional request-lifecycle PHP app to a persistent Octane environment required careful management of memory leaks and state bleed between requests.
+2.  **Optimized Search:** Offloading search queries from the primary database to Meilisearch improved latency and provided a much better user experience for media discovery.
+3.  **Client-Server Sync:** Ensuring that rapid interactions (like spamming the "like" button) maintain accurate state without causing race conditions or UI jitter.
 
-## Laravel Sponsors
+## 🚦 Getting Started
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+To run this project locally:
 
-### Premium Partners
-
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
-
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. Clone the repository:
+   ```
+   git clone [https://github.com/](https://github.com/)[your-username]/[repo-name].git
