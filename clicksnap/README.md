@@ -31,6 +31,17 @@ The primary goal of this project was mastering advanced web development concepts
 
 To run this project locally:
 
-1. Clone the repository:
+1. Clone the repository na dmake sure you have php, octane and melisearch isntalled
+
+2. install dependecnies:
    ```
-   git clone [https://github.com/](https://github.com/)[your-username]/[repo-name].git
+   composer install
+    npm install
+3. set up .env envronement
+4. run migration
+    ```
+    php artisan migrate
+5. start meilisearch and laravel octane
+    ```
+    ./meilisearch
+    php artisan octane:start
